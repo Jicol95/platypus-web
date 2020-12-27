@@ -48,9 +48,11 @@
       </v-list>
       <template v-slot:append>
         <base-select
+          v-model="currency"
           class="mx-4"
-          topLabel="Currency"
           :items="currencies"
+          item-text="name"
+          required
           disabled
           append-icon="mdi-currency-gbp"
         />
@@ -67,6 +69,14 @@ import BaseSelect from "@/components/common/BaseSelect.vue";
 export default class DashboardExtendedSidebar extends Vue {
   @Prop(Boolean) readonly value!: boolean;
   private model = null;
+
+  private currencies = [
+    {
+      name: "GBP"
+    }
+  ];
+
+  private currency = this.currencies[0];
 }
 </script>
 
