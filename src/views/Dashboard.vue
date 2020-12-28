@@ -184,7 +184,7 @@
         <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" md="5">
           <v-card flat>
             <v-card-title>
-              <v-btn x-large flat color="primary" height="120px" width="100%"
+              <v-btn x-large text color="primary" height="120px" width="100%"
                 >Setup Monthly Budget</v-btn
               >
             </v-card-title>
