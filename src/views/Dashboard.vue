@@ -3,7 +3,7 @@
     <dashboard-extended-sidebar />
     <v-container class="container-lg">
       <v-row>
-        <v-col cols="7">
+        <v-col cols="12" md="7">
           <v-card flat>
             <v-card-title>
               Transactions
@@ -37,6 +37,51 @@
               </v-row>
               <v-divider></v-divider>
               <v-list>
+                <v-list-item two-line>
+                  <v-list-item-avatar>
+                    <v-img src="@/assets/logo.png" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Platypus Finance</v-list-item-title>
+                    <v-list-item-subtitle
+                      >17 Jun 20 09:40pm</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                  <v-spacer class="pl-4"></v-spacer>
+                  <v-list-item-action-text>
+                    <p class="my-6 text-h5">£22.20</p>
+                  </v-list-item-action-text>
+                </v-list-item>
+                <v-list-item two-line>
+                  <v-list-item-avatar>
+                    <v-img src="@/assets/logo.png" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Platypus Finance</v-list-item-title>
+                    <v-list-item-subtitle
+                      >17 Jun 20 09:40pm</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                  <v-spacer class="pl-4"></v-spacer>
+                  <v-list-item-action-text>
+                    <p class="my-6 text-h5">£22.20</p>
+                  </v-list-item-action-text>
+                </v-list-item>
+                <v-list-item two-line>
+                  <v-list-item-avatar>
+                    <v-img src="@/assets/logo.png" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Platypus Finance</v-list-item-title>
+                    <v-list-item-subtitle
+                      >17 Jun 20 09:40pm</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                  <v-spacer class="pl-4"></v-spacer>
+                  <v-list-item-action-text>
+                    <p class="my-6 text-h5">£22.20</p>
+                  </v-list-item-action-text>
+                </v-list-item>
                 <v-list-item two-line>
                   <v-list-item-avatar>
                     <v-img src="@/assets/logo.png" />
@@ -136,7 +181,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="5">
+        <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" md="5">
           <v-card flat>
             <v-card-title>
               <v-btn x-large flat color="primary" height="120px" width="100%"
@@ -228,6 +273,11 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-footer padless color="#fff">
+      <v-col class="text-center" cols="12">
+        Company logos provided by <a href="https://clearbit.com">Clearbit</a>
+      </v-col>
+    </v-footer>
   </div>
 </template>
 
@@ -239,3 +289,15 @@ import DashboardExtendedSidebar from "@/components/layout/DashboardExtendedSideb
 @Component({ components: { BaseInput, DashboardExtendedSidebar } })
 export default class Dashboard extends Vue {}
 </script>
+
+<style scoped>
+a:link {
+  text-decoration: inherit;
+  color: black;
+}
+
+a:visited {
+  text-decoration: inherit;
+  color: black;
+}
+</style>

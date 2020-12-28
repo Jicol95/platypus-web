@@ -24,7 +24,7 @@
       <template v-slot:append>
         <v-menu top offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-list-item v-bind="attrs" v-on="on" class="px-2">
+            <v-list-item v-bind="attrs" v-on="on" class="px-2 mb-7">
               <v-list-item-avatar class="profile-img" tile>
                 <v-img src="@/assets/logo.png"></v-img>
               </v-list-item-avatar>
