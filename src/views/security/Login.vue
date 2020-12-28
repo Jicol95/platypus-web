@@ -16,23 +16,19 @@
             </header>
             <v-form ref="form" v-model="valid" @submit.prevent="login">
               <base-input
+                v-model="authorization.emailAddress"
+                :rules="[requiredRule, emailAddressRule]"
                 required
                 placeholder="Email"
                 type="email"
               ></base-input>
               <base-input
+                v-model="authorization.password"
+                :rules="[requiredRule]"
                 required
                 placeholder="Password"
                 type="password"
               ></base-input>
-              <v-btn
-                @click="dialog = true"
-                text
-                color="info"
-                class="text-capitalize font-weight-regular px-0 mb-4"
-              >
-                Forgotten password?
-              </v-btn>
               <v-btn :loading="loading" block color="primary" type="submit"
                 >Sign in</v-btn
               >
@@ -49,6 +45,11 @@ import { Component, Ref } from "vue-property-decorator";
 import BaseInput from "@/components/common/BaseInput.vue";
 import Validation from "@/mixins/validation";
 import { VForm } from "@/types/vForm";
+import { getModule } from "vuex-module-decorators";
+import UserModule from "@/store/userModule";
+import AuthModel from "@/models/auth/AuthModel";
+
+const userModule = getModule(UserModule);
 
 @Component({
   components: {
@@ -58,12 +59,26 @@ import { VForm } from "@/types/vForm";
 export default class Login extends Validation {
   @Ref() readonly form!: VForm;
 
+  private authorization: AuthModel = {
+    emailAddress: "",
+    password: ""
+  };
+
   private valid = false;
   private loading = false;
-  private dialog = false;
 
   private async login() {
-    return;
+    try {
+      this.form.validate();
+      if (this.valid) {
+        this.loading = true;
+        await userModule.login(this.authorization);
+
+        this.$router.replace({ name: "Dashboard" });
+      }
+    } finally {
+      this.loading = false;
+    }
   }
 }
 </script>
