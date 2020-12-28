@@ -1,5 +1,5 @@
 import { VuexModule, Mutation, Action, Module } from "vuex-module-decorators";
-import AuthorisationService from "@/services/authorisationService";
+import AuthService from "@/services/authService";
 import AuthModel from "@/models/auth/authModel";
 import TokenModel from "@/models/auth/tokenModel";
 import TokenRefreshModel from "@/models/auth/tokenRefreshModel";
@@ -33,7 +33,7 @@ export default class UserModule extends VuexModule {
 
   @Action({ rawError: true, commit: "setUserData" })
   public async login(credentials: AuthModel): Promise<TokenModel> {
-    return await AuthorisationService.postLogin(credentials);
+    return await AuthService.postLogin(credentials);
   }
 
   @Action({ commit: "clearUserData" })
@@ -46,7 +46,7 @@ export default class UserModule extends VuexModule {
     refreshToken: TokenRefreshModel
   ): Promise<TokenModel> {
     try {
-      const response = await AuthorisationService.refreshToken(refreshToken);
+      const response = await AuthService.refreshToken(refreshToken);
       this.context.commit("setUserData", response);
       return response;
     } catch {

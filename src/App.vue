@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <sidebar></sidebar>
+    <sidebar v-if="computedAuth"></sidebar>
     <v-main class="main-view">
       <router-view />
     </v-main>
@@ -11,11 +11,18 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Sidebar from "@/components/layout/Sidebar.vue";
+import { getModule } from "vuex-module-decorators";
+import UserModule from "./store/userModule";
+
+const userModule = getModule(UserModule);
 
 @Component({ components: { Sidebar } })
 export default class App extends Vue {
   private drawer: boolean | null = null;
-  private computedAuth = true;
+
+  get computedAuth() {
+    return userModule.loggedIn;
+  }
 }
 </script>
 
