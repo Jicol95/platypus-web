@@ -1,7 +1,8 @@
 export default interface TransactionCreateModel {
   type: number;
-  category: "";
-  amount: 0;
+  category: string;
+  vendorName: string;
+  amount: number;
   purchaseDateUtc: string;
   bankAccountId: string;
 }
