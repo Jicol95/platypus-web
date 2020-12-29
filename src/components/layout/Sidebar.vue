@@ -24,14 +24,18 @@
       <template v-slot:append>
         <v-menu top offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-list-item v-bind="attrs" v-on="on" class="px-2 mb-7">
-              <v-list-item-avatar class="profile-img" tile>
-                <v-img src="@/assets/logo.png"></v-img>
-              </v-list-item-avatar>
-
-              <v-list-item-title>Hello</v-list-item-title>
-            </v-list-item>
+            <v-avatar v-bind="attrs" v-on="on" class="px-2 mb-7" tile>
+              <v-img src="@/assets/logo.png"></v-img>
+            </v-avatar>
           </template>
+          <v-list>
+            <v-list-item @click="() => {}">
+              <v-list-item-title>Change Password</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="onLogout">
+              <v-list-item-title>Sign out</v-list-item-title>
+            </v-list-item>
+          </v-list>
         </v-menu>
       </template>
     </v-navigation-drawer>
@@ -39,8 +43,11 @@
 </template>
 
 <script lang="ts">
+import UserModule from "@/store/userModule";
 import { Vue, Prop, Component } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
 
+const userModule = getModule(UserModule);
 @Component
 export default class TheSidebar extends Vue {
   @Prop(Boolean) readonly value!: boolean;
@@ -82,6 +89,10 @@ export default class TheSidebar extends Vue {
 
   private changePassword() {
     this.passwordDialog = true;
+  }
+
+  private onLogout() {
+    userModule.clearUserData();
   }
 }
 </script>

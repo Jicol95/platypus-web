@@ -8,9 +8,9 @@
             <v-card-title>
               Transactions
               <v-spacer></v-spacer>
-              <v-btn fab class="elevation-0" color="primary">
+              <base-button-primary fab class="elevation-0" color="primary">
                 <v-icon>mdi-plus</v-icon>
-              </v-btn>
+              </base-button-primary>
             </v-card-title>
             <v-card-text>
               <base-input placeholder="Search" append-icon="mdi-magnify" />
@@ -184,8 +184,12 @@
         <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" md="5">
           <v-card flat>
             <v-card-title>
-              <v-btn x-large text color="primary" height="120px" width="100%"
-                >Setup Monthly Budget</v-btn
+              <base-button-primary
+                x-large
+                color="primary"
+                height="120px"
+                width="100%"
+                >Setup Monthly Budget</base-button-primary
               >
             </v-card-title>
             <v-card-title>
@@ -273,7 +277,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-footer padless color="#fff">
+    <v-footer padless color="#fafafa">
       <v-col class="text-center" cols="12">
         Company logos provided by <a href="https://clearbit.com">Clearbit</a>
       </v-col>
@@ -283,10 +287,13 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import BaseButtonPrimary from "@/components/common/BaseButtonPrimary.vue";
 import BaseInput from "@/components/common/BaseInput.vue";
 import DashboardExtendedSidebar from "@/components/layout/DashboardExtendedSidebar.vue";
 
-@Component({ components: { BaseInput, DashboardExtendedSidebar } })
+@Component({
+  components: { BaseInput, BaseButtonPrimary, DashboardExtendedSidebar }
+})
 export default class Dashboard extends Vue {}
 </script>
 

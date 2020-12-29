@@ -29,6 +29,14 @@
                 placeholder="Password"
                 type="password"
               ></base-input>
+              <v-btn
+                @click="dialog = true"
+                text
+                color="info"
+                class="text-capitalize font-weight-regular px-0 mb-4"
+              >
+                Register Account
+              </v-btn>
               <v-btn :loading="loading" block color="primary" type="submit"
                 >Sign in</v-btn
               >
@@ -37,12 +45,14 @@
         </v-col>
       </v-row>
     </v-container>
+    <register-user-dialog :dialog.sync="dialog" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Ref } from "vue-property-decorator";
 import BaseInput from "@/components/common/BaseInput.vue";
+import RegisterUserDialog from "@/components/dialogs/RegisterUserDialog.vue";
 import Validation from "@/mixins/validation";
 import { VForm } from "@/types/vForm";
 import { getModule } from "vuex-module-decorators";
@@ -53,7 +63,8 @@ const userModule = getModule(UserModule);
 
 @Component({
   components: {
-    BaseInput
+    BaseInput,
+    RegisterUserDialog
   }
 })
 export default class Login extends Validation {
@@ -66,6 +77,7 @@ export default class Login extends Validation {
 
   private valid = false;
   private loading = false;
+  private dialog = false;
 
   private async login() {
     try {

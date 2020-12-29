@@ -10,32 +10,16 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item-group v-model="model" mandatory>
-          <v-list-item>
+          <v-list-item v-for="account in accounts" :key="account.bankAccountId">
             <v-list-item-icon class="mx-0">
               <v-icon class="icon" x-small>mdi-circle</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="text-subtitle-2">
-              Citi Bank Int. Ltd.
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-icon class="mx-0">
-              <v-icon class="icon" x-small>mdi-circle</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="text-subtitle-2">
-              HSBC Ltd.
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-icon class="mx-0">
-              <v-icon class="icon" x-small>mdi-circle</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="text-subtitle-2">
-              Standard Chartered
+              {{ account.name }}
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
-        <v-list-item @click="() => {}">
+        <v-list-item @click="dialog = true">
           <v-list-item-icon class="mx-0">
             <v-icon color="blue darken-2" small>mdi-plus</v-icon>
           </v-list-item-icon>
@@ -58,25 +42,49 @@
         />
       </template>
     </v-navigation-drawer>
+    <create-bank-account-dialog
+      :dialog.sync="dialog"
+      @account-created="getAccounts"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import BaseSelect from "@/components/common/BaseSelect.vue";
+import CreateBankAccountDialog from "@/components/dialogs/CreateBankAccountDialog.vue";
+import bankAccountService from "@/services/bankAccountService";
+import BankAccountModel from "@/models/bankAccount/bankAccountModel";
+import { getModule } from "vuex-module-decorators";
+import BankAccountModule from "@/store/bankAccountModule";
 
-@Component({ components: { BaseSelect } })
+const bankAccountModule = getModule(BankAccountModule);
+
+@Component({ components: { BaseSelect, CreateBankAccountDialog } })
 export default class DashboardExtendedSidebar extends Vue {
   @Prop(Boolean) readonly value!: boolean;
   private model = null;
-
   private currencies = [
     {
       name: "GBP"
     }
   ];
-
   private currency = this.currencies[0];
+  private accounts: Array<BankAccountModel> = [];
+  private dialog = false;
+
+  private async created() {
+    await this.getAccounts();
+  }
+
+  private async getAccounts() {
+    this.accounts = await bankAccountService.getBankAccounts();
+  }
+
+  @Watch("model")
+  private onChange(value: number) {
+    bankAccountModule.setBankAccountId(this.accounts[value].bankAccountId);
+  }
 }
 </script>
 
