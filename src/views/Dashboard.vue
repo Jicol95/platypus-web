@@ -259,7 +259,6 @@ export default class Dashboard extends Vue {
 
   private get totalExpense() {
     if (this.transactions.length) {
-      alert(JSON.stringify(this.transactions.filter(x => alert(x.type))));
       return this.transactions
         .filter(x => x.type === 0)
         .map(x => x.amount)
