@@ -8,6 +8,18 @@ import UserModule from "./store/userModule";
 
 Vue.config.productionTip = false;
 
+Vue.filter("toCurrency", function(value: number) {
+  if (typeof value !== "number") {
+    return value;
+  }
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 2
+  });
+  return formatter.format(value);
+});
+
 new Vue({
   router,
   store,

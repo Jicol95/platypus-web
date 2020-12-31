@@ -26,7 +26,7 @@
             <base-input
               v-model="user.emailAddress"
               required
-              :rules="[requiredRule]"
+              :rules="[requiredRule, emailAddressRule]"
               topLabel="Email Address"
             ></base-input>
             <v-row>
@@ -34,15 +34,19 @@
                 <base-input
                   v-model="user.password"
                   required
-                  :rules="[requiredRule]"
+                  :rules="[requiredRule, passwordStrengthRule]"
                   topLabel="Password"
                   type="password"
                 ></base-input>
               </v-col>
               <v-col>
                 <base-input
+                  v-model="passwordConfirm"
                   required
-                  :rules="[requiredRule]"
+                  :rules="[
+                    requiredRule,
+                    passwordsMatchRule(user.password, passwordConfirm)
+                  ]"
                   topLabel="Confirm Password"
                   type="password"
                 ></base-input>
@@ -92,6 +96,8 @@ export default class RegisterUserDialog extends Validation {
     emailAddress: "",
     password: ""
   };
+
+  private passwordConfirm = "";
 
   private async onRegister() {
     if (!this.form.validate()) {

@@ -47,22 +47,24 @@
               <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0">
                   <p class="text-caption">Total Expense</p>
-                  <p class="text-h5">£{{ totalExpense }}</p>
+                  <p class="text-h5">{{ totalExpense | toCurrency }}</p>
                 </v-col>
                 <v-col class="ma-0 pa-0">
                   <p class="text-caption">Total Income</p>
-                  <p class="text-h5">£22.20</p>
+                  <p class="text-h5">{{ totalIncome | toCurrency }}</p>
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col class="ma-0 pa-0 text-right mr-4">
                   <p class="text-caption">Net</p>
-                  <p class="text-h5">£22.20</p>
+                  <p class="text-h5">
+                    {{ (totalIncome - totalExpense) | toCurrency }}
+                  </p>
                 </v-col>
               </v-row>
               <v-divider></v-divider>
               <v-list>
                 <div
-                  v-for="transaction in transactions"
+                  v-for="transaction in filteredTransactions"
                   :key="transaction.transactionId"
                 >
                   <v-list-item two-line>
@@ -81,7 +83,9 @@
                     </v-list-item-content>
                     <v-spacer class="pl-4"></v-spacer>
                     <v-list-item-action-text>
-                      <p class="my-6 text-h5">£{{ transaction.amount }}</p>
+                      <p class="my-6 text-h5">
+                        {{ transaction.amount | toCurrency }}
+                      </p>
                     </v-list-item-action-text>
                   </v-list-item>
                   <v-divider />
@@ -186,12 +190,15 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-footer padless color="#fafafa" app>
+    <v-footer padless color="#fafafa">
       <v-col class="text-center" cols="12">
         Company logos provided by <a href="https://clearbit.com">Clearbit</a>
       </v-col>
     </v-footer>
-    <create-transactionDialog :dialog.sync="createTransactionDialog" />
+    <create-transactionDialog
+      :dialog.sync="createTransactionDialog"
+      @transaction-created="getTransactions"
+    />
   </div>
 </template>
 
@@ -231,6 +238,10 @@ export default class Dashboard extends Vue {
   private menu = false;
 
   private async created() {
+    await this.getTransactions();
+  }
+
+  private async getTransactions() {
     this.transactionQuery.bankAccountId = bankAccountModule.bankAccountId;
     this.transactionQuery.fromUtc = this.dates[0];
     this.transactionQuery.toUtc = this.dates[1];
@@ -254,7 +265,9 @@ export default class Dashboard extends Vue {
   }
 
   private get filteredTransactions() {
-    return this.transactions.filter(x => x.vendorName.includes(this.search));
+    return this.transactions.filter(x =>
+      x.vendorName.toLowerCase().includes(this.search.toLowerCase())
+    );
   }
 
   private get totalExpense() {
@@ -267,14 +280,19 @@ export default class Dashboard extends Vue {
     return 0;
   }
 
+  private get totalIncome() {
+    if (this.transactions.length) {
+      return this.transactions
+        .filter(x => x.type === 1)
+        .map(x => x.amount)
+        .reduce((a, b) => a + b, 0);
+    }
+    return 0;
+  }
+
   @Watch("bankAccountId")
-  private async onBankAccountChanged(bankAccountId: string) {
-    this.transactionQuery.bankAccountId = bankAccountId;
-    this.transactionQuery.fromUtc = this.dates[0];
-    this.transactionQuery.toUtc = this.dates[1];
-    this.transactions = await transactionService.getTransactions(
-      this.transactionQuery
-    );
+  private async onBankAccountChanged() {
+    await this.getTransactions();
   }
 
   @Watch("dateRangeText")

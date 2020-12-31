@@ -43,6 +43,7 @@
                   v-bind="attrs"
                   v-on="on"
                   :value="transaction.purchaseDateUtc"
+                  :rules="[requiredRule]"
                   readonly
                   topLabel="Transaction Date"
                   append-icon="mdi-calendar"
