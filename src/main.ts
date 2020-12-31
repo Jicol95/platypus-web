@@ -5,6 +5,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import { getModule } from "vuex-module-decorators";
 import UserModule from "./store/userModule";
+import moment from "moment";
 
 Vue.config.productionTip = false;
 
@@ -18,6 +19,16 @@ Vue.filter("toCurrency", function(value: number) {
     minimumFractionDigits: 2
   });
   return formatter.format(value);
+});
+
+Vue.filter("formatDate", function(value: string) {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  if (value) {
+    return moment(String(value)).format("DD/MMM/YYYY");
+  }
 });
 
 new Vue({

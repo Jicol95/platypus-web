@@ -78,7 +78,7 @@
                           : "Unspecified"
                       }}</v-list-item-title>
                       <v-list-item-subtitle>{{
-                        transaction.purchaseDateUtc
+                        transaction.purchaseDateUtc | formatDate
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-spacer class="pl-4"></v-spacer>
