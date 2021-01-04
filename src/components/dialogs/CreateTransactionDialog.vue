@@ -5,12 +5,26 @@
         <v-card-title>Create Transaction</v-card-title>
         <v-form ref="form" @submit.prevent="onAddTransaction">
           <v-card-text>
-            <base-input
-              v-model="transaction.vendorName"
-              required
-              :rules="[requiredRule]"
-              topLabel="Vendor Name"
-            ></base-input>
+            <v-row>
+              <v-col>
+                <base-input
+                  v-model="transaction.vendorName"
+                  required
+                  :rules="[requiredRule]"
+                  topLabel="Vendor Name"
+                ></base-input>
+              </v-col>
+              <v-col>
+                <base-select
+                  v-model="transaction.category"
+                  :items="transactionCategories"
+                  :rules="[requiredRule]"
+                  item-text="description"
+                  item-value="value"
+                  topLabel="Category"
+                />
+              </v-col>
+            </v-row>
             <v-row>
               <v-col>
                 <base-select
@@ -80,8 +94,10 @@ import BaseButtonSecondary from "@/components/common/BaseButtonSecondary.vue";
 import { getModule } from "vuex-module-decorators";
 import SnackbarModule from "@/store/snackbarModule";
 import TransactionCreateModel from "@/models/transaction/transactionCreateModel";
+import constantService from "@/services/constantService";
 import transactionService from "@/services/transactionService";
 import BankAccountModule from "@/store/bankAccountModule";
+import ValueDescriptionModel from "@/models/valueDescriptionModel";
 
 const snackbarModule = getModule(SnackbarModule);
 const bankAccountModule = getModule(BankAccountModule);
@@ -108,7 +124,15 @@ export default class CreateTransactionDialog extends Validation {
     bankAccountId: ""
   };
 
+  private transactionCategories: Array<
+    ValueDescriptionModel<string, string>
+  > = [];
+
   private menu = false;
+
+  private async created() {
+    this.transactionCategories = await constantService.getTransactionCategories();
+  }
 
   private async onAddTransaction() {
     if (!this.form.validate()) {
@@ -120,7 +144,6 @@ export default class CreateTransactionDialog extends Validation {
     }
 
     this.transaction.bankAccountId = bankAccountModule.bankAccountId;
-    this.transaction.category = "SHP";
 
     try {
       this.loading = true;
